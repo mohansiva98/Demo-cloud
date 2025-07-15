@@ -72,9 +72,3 @@ resource "aws_lb_target_group_attachment" "ecs_attach" {
   port             = 8000
   depends_on       = [aws_ecs_service.app_service]
 }
-
-# Look up hosted zone for your domain
-data "aws_route53_zone" "main" {
-  name         = "themocafe-spy.com."  # <-- NOTE: must end with a dot
-  private_zone = false
-}
