@@ -50,6 +50,10 @@ resource "aws_lb_target_group" "app_tg" {
   vpc_id   = aws_vpc.main.id
   target_type = "ip"
 
+   depends_on = [
+    aws_lb_listener.app_listener
+  ]
+
   health_check {
     path                = "/healthz"
     interval            = 30
