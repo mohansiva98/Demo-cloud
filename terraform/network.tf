@@ -8,7 +8,12 @@ variable "aws_region" {
 
 data "aws_availability_zones" "available" {
   state = "available"
+  filter {
+    name   = "region-name"
+    values = [var.aws_region]
+  }
 }
+
 
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
