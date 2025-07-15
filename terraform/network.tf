@@ -1,11 +1,3 @@
-variable "project_name" {
-  default = "cloud-test-demo"
-}
-
-variable "aws_region" {
-  default = "ap-south-1"
-}
-
 data "aws_availability_zones" "available" {
   state = "available"
   filter {

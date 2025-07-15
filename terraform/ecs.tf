@@ -70,50 +70,6 @@ resource "aws_security_group" "ecs_sg" {
   }
 }
 
-resource "aws_lb" "app_alb" {
-  name               = "${var.project_name}-alb"
-  internal           = false
-  load_balancer_type = "application"
-  subnets            = [
-    aws_subnet.public_1.id,
-    aws_subnet.public_2.id
-  ]
-  security_groups    = [aws_security_group.ecs_sg.id]
-
-  tags = {
-    Name = "${var.project_name}-alb"
-  }
-}
-
-resource "aws_lb_target_group" "app_tg" {
-  name     = "${var.project_name}-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
-  target_type = "ip"
-
-  health_check {
-    path                = "/"
-    protocol            = "HTTP"
-    matcher             = "200-399"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-  }
-}
-
-resource "aws_lb_listener" "app_listener" {
-  load_balancer_arn = aws_lb.app_alb.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.app_tg.arn
-  }
-}
-
 resource "aws_ecs_service" "app_service" {
   name            = "${var.project_name}-service"
   cluster         = aws_ecs_cluster.app_cluster.id
