@@ -28,8 +28,14 @@ resource "aws_lb" "app_alb" {
   name               = "${var.project_name}-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [aws_subnet.public_1.id, aws_subnet.public_2.id]
+
+  # ✅ Use two subnets in different AZs
+  subnets = [
+    aws_subnet.public_1.id,
+    aws_subnet.public_2.id
+  ]
+
+  security_groups = [aws_security_group.alb_sg.id]
 
   tags = {
     Name = "${var.project_name}-alb"
@@ -65,10 +71,3 @@ resource "aws_lb_listener" "app_listener" {
   }
 }
 
-#  to Target Group
-resource "aws_lb_target_group_attachment" "ecs_attach" {
-  target_group_arn = aws_lb_target_group.app_tg.arn
-  target_id        = aws_ecs_service.app_service.id
-  port             = 8000
-  depends_on       = [aws_ecs_service.app_service]
-}
