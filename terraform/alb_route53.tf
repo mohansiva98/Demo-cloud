@@ -73,21 +73,8 @@ resource "aws_lb_target_group_attachment" "ecs_attach" {
   depends_on       = [aws_ecs_service.app_service]
 }
 
-# Hosted zone (existing)
+# Look up hosted zone for your domain
 data "aws_route53_zone" "main" {
-  name         = "themocafe-spy.shop"
+  name         = "themocafe-spy.com."  # <-- NOTE: must end with a dot
   private_zone = false
-}
-
-# Create A record for ALB
-resource "aws_route53_record" "app_dns" {
-  zone_id = data.aws_route53_zone.main.zone_id
-  name    = "app"
-  type    = "A"
-
-  alias {
-    name                   = aws_lb.app_alb.dns_name
-    zone_id                = aws_lb.app_alb.zone_id
-    evaluate_target_health = true
-  }
 }
