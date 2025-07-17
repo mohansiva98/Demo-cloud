@@ -6,7 +6,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - docker --version
-      - $(aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 375046931023.dkr.ecr.ap-south-1.amazonaws.com)
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 375046931023.dkr.ecr.ap-south-1.amazonaws.com
       - REPOSITORY_URI=375046931023.dkr.ecr.ap-south-1.amazonaws.com/demo-cloud1-repo
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
